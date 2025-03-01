@@ -1,6 +1,5 @@
-import {GameQuery} from "../App";
+import { GameQuery } from "../App";
 import useData from "./useData";
-import { Genre } from "./useGenres";
 
 export interface Platform {
   id: number;
@@ -17,18 +16,19 @@ export interface Game {
   rating_top: number;
 }
 
-const useGames = (gameQuery: GameQuery) =>
-  useData<Game>(
+const useGames = (gameQuery: GameQuery) => {
+  return useData<Game>(
     "/games",
     {
       params: {
-        genres: gameQuery.genre?.id,
-        platforms: gameQuery.platform?.id,
-        ordering: gameQuery.sortOrder,
-        search: gameQuery.searchText
+        genres: gameQuery.genre?.id || undefined,  // Ensure valid query params
+        platforms: gameQuery.platform?.id || undefined,
+        ordering: gameQuery.sortOrder || undefined,
+        search: gameQuery.searchText || undefined,
       },
     },
-    [gameQuery]
+    [gameQuery.genre?.id, gameQuery.platform?.id, gameQuery.sortOrder, gameQuery.searchText] // Optimized dependencies
   );
+};
 
 export default useGames;

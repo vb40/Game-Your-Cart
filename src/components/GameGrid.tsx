@@ -1,4 +1,4 @@
-import { SimpleGrid, Text } from "@chakra-ui/react";
+import { SimpleGrid, Text, Spinner, Center } from "@chakra-ui/react";
 import { GameQuery } from "../App";
 import useGames from "../hooks/useGames";
 import GameCard from "./GameCard";
@@ -20,7 +20,15 @@ const GameGrid = ({ gameQuery, cart, onAddToCart, onRemoveFromCart }: Props) => 
 
   return (
     <SimpleGrid columns={{ sm: 1, md: 2, lg: 3, xl: 4 }} padding="10px" spacing={6}>
-      {/* Show skeletons while loading */}
+      
+      {/* Show Spinner when loading */}
+      {isLoading && (
+        <Center width="100%">
+          <Spinner size="xl" color="blue.500" thickness="4px" speed="0.7s" />
+        </Center>
+      )}
+
+      {/* Show Skeleton Loaders when loading */}
       {isLoading &&
         skeletons.map((skeleton) => (
           <GameCardContainer key={skeleton}>
@@ -28,17 +36,22 @@ const GameGrid = ({ gameQuery, cart, onAddToCart, onRemoveFromCart }: Props) => 
           </GameCardContainer>
         ))}
 
-      {/* Render actual game cards */}
-      {data.map((game) => (
-        <GameCardContainer key={game.id}>
-          <GameCard 
-            game={game} 
-            count={cart[game.id] || 0} 
-            onAddToCart={onAddToCart} 
-            onRemoveFromCart={onRemoveFromCart} 
-          />
-        </GameCardContainer>
-      ))}
+      {/* Render actual game cards when data is available */}
+      {!isLoading && data.length > 0 ? (
+        data.map((game) => (
+          <GameCardContainer key={game.id}>
+            <GameCard 
+              game={game} 
+              count={cart[game.id] || 0} 
+              onAddToCart={onAddToCart} 
+              onRemoveFromCart={onRemoveFromCart} 
+            />
+          </GameCardContainer>
+        ))
+      ) : (
+        !isLoading && <Text color="gray.400" textAlign="center" width="100%">No games found.</Text>
+      )}
+      
     </SimpleGrid>
   );
 };
