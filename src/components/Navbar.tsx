@@ -53,7 +53,7 @@ const NavBar = ({ onSearch, cartCount }: Props) => {
         <Box position="relative">
           <IconButton
             aria-label="Cart"
-            icon={<FaShoppingCart size={26} />}
+            icon={<Icon as={FaShoppingCart} />}
             variant="ghost"
           />
           {cartCount > 0 && (
@@ -75,7 +75,7 @@ const NavBar = ({ onSearch, cartCount }: Props) => {
 
         {/* Profile Icon with Dropdown */}
         <Menu>
-          <MenuButton as={IconButton} icon={<Avatar size="sm" icon={<FaUser />} />} />
+          <MenuButton as={IconButton} icon={<Avatar size="sm"><Icon as={FaUser} /></Avatar>} />
           <MenuList>
             <MenuItem onClick={handleSignOut}>Sign Out</MenuItem> {/* ✅ Fixed navigation */}
           </MenuList>

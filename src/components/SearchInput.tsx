@@ -1,4 +1,4 @@
-import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import { Input, InputGroup, InputLeftElement, Icon } from "@chakra-ui/react";  {/* ✅ Import Icon */}
 import { useRef } from "react";
 import { BsSearch } from "react-icons/bs";
 
@@ -15,7 +15,9 @@ const SearchInput = ({ onSearch }: Props) => {
       if (ref.current) onSearch(ref.current.value);
     }}>
       <InputGroup>
-        <InputLeftElement children={<BsSearch />} />
+        <InputLeftElement pointerEvents="none">
+          <Icon as={BsSearch} />  {/* ✅ Fixed */}
+        </InputLeftElement>
         <Input ref={ref} borderRadius={20} placeholder="Search games..." variant="filled" />
       </InputGroup>
     </form>

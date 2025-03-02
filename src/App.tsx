@@ -1,13 +1,13 @@
-import { Routes, Route } from "react-router-dom";
 import { Box, Flex, Grid, GridItem, Show } from "@chakra-ui/react";
+import { Routes, Route } from "react-router-dom"; // ✅ Import Routes & Route
 import { useState } from "react";
 import GameGrid from "./components/GameGrid";
 import GameHeading from "./components/GameHeading";
-import GenreList from "./components/GenreList";
-import NavBar from "./components/NavBar";
+import GenreList from "./components/Genrelist";
+import NavBar from "./components/Navbar";
 import PlatformSelector from "./components/PlatformSelector";
 import SortSelector from "./components/SortSelector";
-import ThankYou from "./pages/ThankYou"; // ✅ Import Thank You page
+import ThankYou from "./pages/Thankyou"; // ✅ Import ThankYou page
 import { Platform } from "./hooks/useGames";
 import { Genre } from "./hooks/useGenres";
 
@@ -22,40 +22,59 @@ function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
   const [cart, setCart] = useState<{ [gameId: number]: number }>({});
 
+  // Function to handle adding to cart
+  const handleAddToCart = (gameId: number) => {
+    setCart((prevCart) => ({
+      ...prevCart,
+      [gameId]: (prevCart[gameId] || 0) + 1,
+    }));
+  };
+
+  // Function to handle removing from cart
+  const handleRemoveFromCart = (gameId: number) => {
+    setCart((prevCart) => {
+      if (!prevCart[gameId]) return prevCart;
+      const updatedCart = { ...prevCart, [gameId]: prevCart[gameId] - 1 };
+      if (updatedCart[gameId] === 0) delete updatedCart[gameId];
+      return updatedCart;
+    });
+  };
+
+  // Total cart count
+  const cartCount = Object.values(cart).reduce((total, count) => total + count, 0);
+
   return (
-    <Grid
-      templateAreas={{
-        base: `"nav" "main"`,
-        lg: `"nav nav" "aside main"`,
-      }}
-      templateColumns={{
-        base: '1fr',
-        lg: '250px 1fr'
-      }}
-    >
-      {/* Navbar with Cart Count */}
-      <GridItem area="nav">
-        <NavBar 
-          onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })} 
-          cartCount={Object.values(cart).reduce((total, count) => total + count, 0)}
-        />
-      </GridItem>
+    <>
+      <NavBar 
+        onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })} 
+        cartCount={cartCount} 
+      />
 
-      {/* Sidebar for Genre Selection */}
-      <Show above="lg">
-        <GridItem area="aside" paddingX={5}>
-          <GenreList 
-            selectedGenre={gameQuery.genre} 
-            onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })} 
-          />
-        </GridItem>
-      </Show>
+      <Routes>
+        {/* ✅ Home Route */}
+        <Route path="/" element={
+          <Grid
+            templateAreas={{
+              base: `"main"`,
+              lg: `"aside main"`,
+            }}
+            templateColumns={{
+              base: "1fr",
+              lg: "250px 1fr"
+            }}
+          >
+            {/* Sidebar for Genre Selection */}
+            <Show above="lg">
+              <GridItem area="aside" paddingX={5}>
+                <GenreList 
+                  selectedGenre={gameQuery.genre} 
+                  onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })} 
+                />
+              </GridItem>
+            </Show>
 
-      {/* Main Content */}
-      <GridItem area="main">
-        <Routes> {/* ✅ Use Routes here */}
-          <Route path="/" element={
-            <>
+            {/* Main Content */}
+            <GridItem area="main">
               <Box paddingLeft={2}>
                 <GameHeading gameQuery={gameQuery} />
                 <Flex marginBottom={5}>
@@ -71,17 +90,22 @@ function App() {
                   />
                 </Flex>
               </Box>
+
+              {/* Pass cart state & update functions to GameGrid */}
               <GameGrid 
                 gameQuery={gameQuery} 
                 cart={cart} 
+                onAddToCart={handleAddToCart} 
+                onRemoveFromCart={handleRemoveFromCart} 
               />
-            </>
-          } />
-          
-          <Route path="/thank-you" element={<ThankYou />} /> {/* ✅ Ensure Thank You page route exists */}
-        </Routes>
-      </GridItem>
-    </Grid>
+            </GridItem>
+          </Grid>
+        }/>
+
+        {/* ✅ Thank You Page Route */}
+        <Route path="/thank-you" element={<ThankYou />} />
+      </Routes>
+    </>
   );
 }
 
