@@ -1,3 +1,4 @@
+import { Routes, Route } from "react-router-dom";
 import { Box, Flex, Grid, GridItem, Show } from "@chakra-ui/react";
 import { useState } from "react";
 import GameGrid from "./components/GameGrid";
@@ -6,6 +7,7 @@ import GenreList from "./components/GenreList";
 import NavBar from "./components/NavBar";
 import PlatformSelector from "./components/PlatformSelector";
 import SortSelector from "./components/SortSelector";
+import ThankYou from "./pages/ThankYou"; // ✅ Import Thank You page
 import { Platform } from "./hooks/useGames";
 import { Genre } from "./hooks/useGenres";
 
@@ -18,28 +20,7 @@ export interface GameQuery {
 
 function App() {
   const [gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery);
-  const [cart, setCart] = useState<{ [gameId: number]: number }>({}); // Store game counts
-
-  // Function to handle adding to cart
-  const handleAddToCart = (gameId: number) => {
-    setCart((prevCart) => ({
-      ...prevCart,
-      [gameId]: (prevCart[gameId] || 0) + 1,
-    }));
-  };
-
-  // Function to handle removing from cart
-  const handleRemoveFromCart = (gameId: number) => {
-    setCart((prevCart) => {
-      if (!prevCart[gameId]) return prevCart; // Prevent negative count
-      const updatedCart = { ...prevCart, [gameId]: prevCart[gameId] - 1 };
-      if (updatedCart[gameId] === 0) delete updatedCart[gameId]; // Remove game if count is 0
-      return updatedCart;
-    });
-  };
-
-  // Total items in cart
-  const cartCount = Object.values(cart).reduce((total, count) => total + count, 0);
+  const [cart, setCart] = useState<{ [gameId: number]: number }>({});
 
   return (
     <Grid
@@ -56,7 +37,7 @@ function App() {
       <GridItem area="nav">
         <NavBar 
           onSearch={(searchText) => setGameQuery({ ...gameQuery, searchText })} 
-          cartCount={cartCount} // Pass total cart count to Navbar
+          cartCount={Object.values(cart).reduce((total, count) => total + count, 0)}
         />
       </GridItem>
 
@@ -72,33 +53,36 @@ function App() {
 
       {/* Main Content */}
       <GridItem area="main">
-        <Box paddingLeft={2}>
-          <GameHeading gameQuery={gameQuery} />
-          <Flex marginBottom={5}>
-            <Box marginRight={5}>
-              <PlatformSelector 
-                selectedPlatform={gameQuery.platform} 
-                onSelectPlatform={(platform) => setGameQuery({ ...gameQuery, platform })} 
+        <Routes> {/* ✅ Use Routes here */}
+          <Route path="/" element={
+            <>
+              <Box paddingLeft={2}>
+                <GameHeading gameQuery={gameQuery} />
+                <Flex marginBottom={5}>
+                  <Box marginRight={5}>
+                    <PlatformSelector 
+                      selectedPlatform={gameQuery.platform} 
+                      onSelectPlatform={(platform) => setGameQuery({ ...gameQuery, platform })} 
+                    />
+                  </Box>
+                  <SortSelector 
+                    sortOrder={gameQuery.sortOrder} 
+                    onSelectSortOrder={(sortOrder) => setGameQuery({ ...gameQuery, sortOrder })} 
+                  />
+                </Flex>
+              </Box>
+              <GameGrid 
+                gameQuery={gameQuery} 
+                cart={cart} 
               />
-            </Box>
-            <SortSelector 
-              sortOrder={gameQuery.sortOrder} 
-              onSelectSortOrder={(sortOrder) => setGameQuery({ ...gameQuery, sortOrder })} 
-            />
-          </Flex>
-        </Box>
-
-        {/* Pass cart state & update functions to GameGrid */}
-        <GameGrid 
-          gameQuery={gameQuery} 
-          cart={cart} 
-          onAddToCart={handleAddToCart} 
-          onRemoveFromCart={handleRemoveFromCart} 
-        />
+            </>
+          } />
+          
+          <Route path="/thank-you" element={<ThankYou />} /> {/* ✅ Ensure Thank You page route exists */}
+        </Routes>
       </GridItem>
     </Grid>
   );
 }
 
 export default App;
-

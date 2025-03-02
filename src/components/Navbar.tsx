@@ -1,25 +1,40 @@
-import { HStack, Image, Box, Spacer, IconButton, Badge, InputGroup, InputLeftElement, Input } from "@chakra-ui/react";
-import { FaShoppingCart, FaSearch } from "react-icons/fa";
+import { 
+  HStack, Image, Box, IconButton, Badge, InputGroup, 
+  InputLeftElement, Input, Menu, MenuButton, MenuList, MenuItem, Avatar, 
+  Icon
+} from "@chakra-ui/react";
+import { FaShoppingCart, FaSearch, FaUser } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Import navigate hook
 import logo from "../assets/logo.webp";
 import ColorModeSwitch from "./ColorModeSwitch";
-import { useState } from "react";
 
 interface Props {
   onSearch: (searchText: string) => void;
-  cartCount: number; // Display cart count
+  cartCount: number;
 }
 
 const NavBar = ({ onSearch, cartCount }: Props) => {
-  return (
-    <HStack padding="10px" width="100%">
-      {/* Logo */}
-      <Image src={logo} boxSize="125px" />
+  const navigate = useNavigate(); // ✅ Initialize useNavigate here
 
-      {/* Centered Larger Search Bar */}
+  const handleSignOut = () => {
+    navigate("/thank-you"); // ✅ Ensure the route exists in App.tsx
+  };
+
+  return (
+    <HStack padding="10px" width="100%" justifyContent="space-between">
+      {/* Logo (Click to Refresh) */}
+      <Image 
+        src={logo} 
+        boxSize="125px" 
+        cursor="pointer" 
+        onClick={() => window.location.reload()} 
+      />
+
+      {/* Centered Search Bar */}
       <Box flex="1" display="flex" justifyContent="center">
-        <InputGroup width="70%"> {/* Increased width */}
+        <InputGroup width="70%">
           <InputLeftElement pointerEvents="none">
-            <FaSearch color="gray.500" />
+            <Icon as={FaSearch} color="gray.500" />
           </InputLeftElement>
           <Input
             placeholder="Search games..."
@@ -32,31 +47,39 @@ const NavBar = ({ onSearch, cartCount }: Props) => {
         </InputGroup>
       </Box>
 
-      {/* Cart Icon & Dark Mode Switch */}
+      {/* Cart Icon, Profile & Dark Mode */}
       <HStack spacing={6}>
         {/* Cart Icon with Badge */}
         <Box position="relative">
           <IconButton
             aria-label="Cart"
-            icon={<FaShoppingCart size={26} />} // Larger & wider icon
+            icon={<FaShoppingCart size={26} />}
             variant="ghost"
           />
           {cartCount > 0 && (
             <Badge 
               position="absolute" 
-              top="0" 
-              right="0" 
-              colorScheme="pink" 
+              top="-5px" 
+              right="-5px" 
+              colorScheme="red" 
               borderRadius="full" 
               fontSize="sm"
-              padding="3px 6px"
-              bg="red.500" // Set badge color to red
-              color="white" // Ensures visibility on dark mode
+              padding="4px 8px"
+              bg="red.500"
+              color="white"
             >
               {cartCount}
             </Badge>
           )}
         </Box>
+
+        {/* Profile Icon with Dropdown */}
+        <Menu>
+          <MenuButton as={IconButton} icon={<Avatar size="sm" icon={<FaUser />} />} />
+          <MenuList>
+            <MenuItem onClick={handleSignOut}>Sign Out</MenuItem> {/* ✅ Fixed navigation */}
+          </MenuList>
+        </Menu>
 
         {/* Dark Mode Switch */}
         <ColorModeSwitch />
