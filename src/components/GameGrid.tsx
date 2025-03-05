@@ -28,7 +28,6 @@ const GameGrid = ({ gameQuery, cart, onAddToCart, onRemoveFromCart }: Props) => 
         </Center>
       )}
 
-      {/* Show Skeleton Loaders when loading */}
       {isLoading &&
         skeletons.map((skeleton) => (
           <GameCardContainer key={skeleton}>
@@ -36,7 +35,6 @@ const GameGrid = ({ gameQuery, cart, onAddToCart, onRemoveFromCart }: Props) => 
           </GameCardContainer>
         ))}
 
-      {/* Render actual game cards when data is available */}
       {!isLoading && data.length > 0 ? (
         data.map((game) => (
           <GameCardContainer key={game.id}>

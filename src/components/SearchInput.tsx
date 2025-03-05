@@ -16,7 +16,7 @@ const SearchInput = ({ onSearch }: Props) => {
     }}>
       <InputGroup>
         <InputLeftElement pointerEvents="none">
-          <Icon as={BsSearch} />  {/* ✅ Fixed */}
+          <Icon as={BsSearch} /> 
         </InputLeftElement>
         <Input ref={ref} borderRadius={20} placeholder="Search games..." variant="filled" />
       </InputGroup>

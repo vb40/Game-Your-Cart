@@ -19,10 +19,10 @@ interface Props {
 
 const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
   const { data, isLoading, error } = useGenres();
-  const selectedBg = useColorModeValue("blue.500", "blue.400"); // Selected background color
-  const hoverBg = useColorModeValue("gray.300", "gray.600"); // Hover background color
-  const defaultBg = useColorModeValue("gray.100", "gray.800"); // Default background color
-  const textColor = useColorModeValue("black", "white"); // Adaptive text color
+  const selectedBg = useColorModeValue("blue.500", "blue.400"); 
+  const hoverBg = useColorModeValue("gray.300", "gray.600"); 
+  const defaultBg = useColorModeValue("gray.100", "gray.800"); 
+  const textColor = useColorModeValue("black", "white"); 
 
   if (error) return null;
   if (isLoading) return <Spinner />;
@@ -44,16 +44,16 @@ const GenreList = ({ selectedGenre, onSelectGenre }: Props) => {
                           />
                           <Button
                               variant="ghost"
-                              onClick={() => onSelectGenre(genre)} // Pass full genre object
+                              onClick={() => onSelectGenre(genre)} 
                               bg={selectedGenre?.id === genre.id ? selectedBg : defaultBg}
                               color={selectedGenre?.id === genre.id ? "white" : textColor}
                               width="100%"
                               textAlign="left"
                               justifyContent="flex-start"
                               borderRadius="lg"
-                              boxShadow={selectedGenre?.id === genre.id ? "md" : "none"} // Adds a shadow to the selected genre
+                              boxShadow={selectedGenre?.id === genre.id ? "md" : "none"} 
                               _hover={{ bg: hoverBg, transition: "0.2s ease-in-out" }}
-                              _focus={{ outline: "none" }} // Removes default focus outline
+                              _focus={{ outline: "none" }} 
                           >
                               {genre.name}
                           </Button>

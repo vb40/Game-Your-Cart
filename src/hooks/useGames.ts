@@ -21,7 +21,7 @@ const useGames = (gameQuery: GameQuery) => {
     "/games",
     {
       params: {
-        genres: gameQuery.genre?.id || undefined,  // Ensure valid query params
+        genres: gameQuery.genre?.id || undefined,  
         platforms: gameQuery.platform?.id || undefined,
         ordering: gameQuery.sortOrder || undefined,
         search: gameQuery.searchText || undefined,

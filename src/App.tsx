@@ -51,7 +51,7 @@ function App() {
       />
 
       <Routes>
-        {/* ✅ Home Route */}
+        // Home routes
         <Route path="/" element={
           <Grid
             templateAreas={{
@@ -63,7 +63,7 @@ function App() {
               lg: "250px 1fr"
             }}
           >
-            {/* Sidebar for Genre Selection */}
+            
             <Show above="lg">
               <GridItem area="aside" paddingX={5}>
                 <GenreList 
@@ -73,7 +73,7 @@ function App() {
               </GridItem>
             </Show>
 
-            {/* Main Content */}
+            // Main Content
             <GridItem area="main">
               <Box paddingLeft={2}>
                 <GameHeading gameQuery={gameQuery} />
@@ -91,7 +91,7 @@ function App() {
                 </Flex>
               </Box>
 
-              {/* Pass cart state & update functions to GameGrid */}
+              
               <GameGrid 
                 gameQuery={gameQuery} 
                 cart={cart} 
@@ -102,7 +102,7 @@ function App() {
           </Grid>
         }/>
 
-        {/* ✅ Thank You Page Route */}
+        
         <Route path="/thank-you" element={<ThankYou />} />
       </Routes>
     </>

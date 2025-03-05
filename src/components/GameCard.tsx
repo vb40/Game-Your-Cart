@@ -12,7 +12,7 @@ interface Props {
   onRemoveFromCart: (gameId: number) => void;
 }
 
-// Generate a random price between ₹500 and ₹2000 with a discount
+
 const generatePrice = () => {
   const originalPrice = Math.floor(Math.random() * (2000 - 500 + 1)) + 500;
   const discount = Math.floor(Math.random() * (30 - 10 + 1)) + 10;

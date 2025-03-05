@@ -14,15 +14,15 @@ interface Props {
 }
 
 const NavBar = ({ onSearch, cartCount }: Props) => {
-  const navigate = useNavigate(); // ✅ Initialize useNavigate here
+  const navigate = useNavigate(); 
 
   const handleSignOut = () => {
-    navigate("/thank-you"); // ✅ Ensure the route exists in App.tsx
+    navigate("/thank-you"); 
   };
 
   return (
     <HStack padding="10px" width="100%" justifyContent="space-between">
-      {/* Logo (Click to Refresh) */}
+      
       <Image 
         src={logo} 
         boxSize="125px" 
@@ -47,9 +47,7 @@ const NavBar = ({ onSearch, cartCount }: Props) => {
         </InputGroup>
       </Box>
 
-      {/* Cart Icon, Profile & Dark Mode */}
       <HStack spacing={6}>
-        {/* Cart Icon with Badge */}
         <Box position="relative">
           <IconButton
             aria-label="Cart"
@@ -73,15 +71,15 @@ const NavBar = ({ onSearch, cartCount }: Props) => {
           )}
         </Box>
 
-        {/* Profile Icon with Dropdown */}
+        
         <Menu>
           <MenuButton as={IconButton} icon={<Avatar size="sm"><Icon as={FaUser} /></Avatar>} />
           <MenuList>
-            <MenuItem onClick={handleSignOut}>Sign Out</MenuItem> {/* ✅ Fixed navigation */}
+            <MenuItem onClick={handleSignOut}>Sign Out</MenuItem> 
           </MenuList>
         </Menu>
 
-        {/* Dark Mode Switch */}
+        
         <ColorModeSwitch />
       </HStack>
     </HStack>
